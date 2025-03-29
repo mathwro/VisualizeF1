@@ -1,2 +1,12 @@
-# VisualizeF1
-Hobby project for visualizing F1 Data
+# Python commands
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+# Run the app
+```bash
+python3 main.py
+```
