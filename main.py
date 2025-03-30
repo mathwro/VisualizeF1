@@ -1,24 +1,30 @@
-from urllib.request import urlopen
+import data
 import json
-#import streamlit as st
+import streamlit as st
 
-#drivers = urlopen('https://api.openf1.org/v1/drivers')
-#driverdata = json.loads(driverdata.read().decode('utf-8'))
+# Filters
+filters = {
+    'session_name': 'Race'
+}
 
-sessions = urlopen('https://api.openf1.org/v1/sessions')
-sessiondata = json.loads(sessions.read().decode('utf-8'))
+sessionData = data.GetData('sessions')
+
 # Filter out sessions without 'date_start' field
-valid_sessions = [session for session in sessiondata if 'date_start' in session]
+valid_sessions = [session for session in sessionData if 'date_start' in session]
+
+# Apply all active filters from the filters dictionary
+filtered_sessions = valid_sessions
+for key, value in filters.items():
+    if value:  # Only apply if the filter has a value
+        filtered_sessions = [session for session in filtered_sessions if session.get(key) == value]
 
 # Sort sessions by date and get the 3 most recent ones
-session3 = sorted(valid_sessions, key=lambda x: x['date_start'], reverse=True)[:3]
+session3 = sorted(filtered_sessions, key=lambda x: x['date_start'], reverse=True)[:3]
 
 # Pretty print the session data
 for session in session3:
     print(json.dumps(session, indent=4))
-
-# Get a list of all active drivers full names
-#driverlist = [driver['full_name'] for driver in data]
-
-print(session3)
-#print(drivers)
+    
+st.title("F1 Session Data")
+st.write("This is the F1 Session Data app.")
+st.line_chart
