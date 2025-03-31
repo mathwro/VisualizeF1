@@ -1,30 +1,22 @@
-import data
-import json
+import data, util
 import streamlit as st
+from datetime import datetime
 
-# Filters
-filters = {
-    'session_name': 'Race'
-}
+def main():
+    # Filters
+    filters = {
+        'session_name': 'Race'
+    }
 
-sessionData = data.GetData('sessions')
+    # Get the session data from the API
+    sessionData = data.GetData('sessions')
 
-# Filter out sessions without 'date_start' field
-valid_sessions = [session for session in sessionData if 'date_start' in session]
+    # Apply all active filters from the filters dictionary
+    filtered_sessions = util.applyFilters(sessionData, filters)
+    #util.prettyPrintJson(util.getLastX(filtered_sessions, 'date_start', reverse=True, count=3))
 
-# Apply all active filters from the filters dictionary
-filtered_sessions = valid_sessions
-for key, value in filters.items():
-    if value:  # Only apply if the filter has a value
-        filtered_sessions = [session for session in filtered_sessions if session.get(key) == value]
+    standings = data.GetDriverChampionshipPoints(datetime.now().year)
+    util.prettyPrintDriverStandings(standings)
 
-# Sort sessions by date and get the 3 most recent ones
-session3 = sorted(filtered_sessions, key=lambda x: x['date_start'], reverse=True)[:3]
-
-# Pretty print the session data
-for session in session3:
-    print(json.dumps(session, indent=4))
-    
-st.title("F1 Session Data")
-st.write("This is the F1 Session Data app.")
-st.line_chart
+if __name__ == "__main__":
+    main()
