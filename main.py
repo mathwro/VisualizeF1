@@ -1,22 +1,25 @@
-import data, util
 import streamlit as st
+import data, util
 from datetime import datetime
+import championshipDriver as chd
+import championshipConstructor as chc
+
+
+
+def constructor_championship_page():
+    st.title("Constructor Championship")
+    # Placeholder for constructor championship data
+    st.info("Constructor championship data is not yet implemented.")
+    # You can add logic here to fetch and display constructor data.
 
 def main():
-    # Filters
-    filters = {
-        'session_name': 'Race'
-    }
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio("Go to", ["Driver Championship", "Constructor Championship"])
 
-    # Get the session data from the API
-    sessionData = data.GetData('sessions')
-
-    # Apply all active filters from the filters dictionary
-    filtered_sessions = util.applyFilters(sessionData, filters)
-    #util.prettyPrintJson(util.getLastX(filtered_sessions, 'date_start', reverse=True, count=3))
-
-    standings = data.GetDriverChampionshipPoints(datetime.now().year)
-    util.prettyPrintDriverStandings(standings)
+    if page == "Driver Championship":
+        chd.driver_championship_page()
+    elif page == "Constructor Championship":
+        chc.constructor_championship_page()
 
 if __name__ == "__main__":
     main()

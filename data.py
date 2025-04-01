@@ -2,23 +2,29 @@ from urllib.request import urlopen
 import requests
 import json
 
-def GetData(DataType):
-  # Define the URL based on the DataType
-  rawData = urlopen(f'https://api.openf1.org/v1/{DataType}')      
-  data = json.loads(rawData.read().decode('utf-8'))
-  return data
-
-def GetDriverChampionshipPoints(year):
-    url = f"http://api.jolpi.ca/ergast/f1/{year}/driverStandings.json"
+def GetChampionshipPoints(year, type):
+    url = f"http://api.jolpi.ca/ergast/f1/{year}/{type}.json"
     response = requests.get(url)
 
     if response.status_code == 200:
-        data = response.json()
-        
         try:
-            standings = data['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings']
+            data = response.json()
+            standings = None
+
+            # Safely navigate the JSON structure
+            if type == 'driverStandings':
+                standings_lists = data.get('MRData', {}).get('StandingsTable', {}).get('StandingsLists', [])
+                if standings_lists:
+                    standings = standings_lists[0].get('DriverStandings', [])
+            elif type == 'constructorStandings':
+                standings_lists = data.get('MRData', {}).get('StandingsTable', {}).get('StandingsLists', [])
+                if standings_lists:
+                    standings = standings_lists[0].get('ConstructorStandings', [])
+            else:
+                print("Invalid type specified.")
+
             return standings
-        except (KeyError, IndexError) as e:
+        except (KeyError, IndexError, ValueError) as e:
             print("Error parsing data:", e)
             return None
     else:
