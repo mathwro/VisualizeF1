@@ -15,7 +15,7 @@ def constructor_championship_page():
             'color': 'black',
             'font-weight': 'bold'
         })
-        st.dataframe(styled_df, row_height=35, height=740)
+        st.table(styled_df)
     else:
         st.error("Failed to fetch driver championship data.")
 
