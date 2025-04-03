@@ -7,11 +7,11 @@ def driver_championship_page():
     st.title("Driver Championship")
     standings = data.GetChampionshipPoints(datetime.now().year, 'driverStandings')
     if standings:
-        df = ConvertToDataFrame(standings)
+        df = ConvertToDataFrame_Driver(standings)
         # Set the index before styling
         df = df.set_index('Position')
         # Apply team colors but also set text to black and bold
-        styled_df = df.style.apply(util.rowTeamColor, axis=1).set_properties(**{
+        styled_df = df.style.apply(util.colorRow, axis=1).set_properties(**{
             'color': 'black',
             'font-weight': 'bold'
         })
@@ -19,7 +19,7 @@ def driver_championship_page():
     else:
         st.error("Failed to fetch driver championship data.")
         
-def ConvertToDataFrame(data):
+def ConvertToDataFrame_Driver(data):
     driver_data = []
     for driver in data:
         driver_data.append({

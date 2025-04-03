@@ -23,26 +23,23 @@ def prettyPrintDriverStandings(data):
         name = f"{driver['Driver'].get('givenName', 'Unknown')} {driver['Driver'].get('familyName', 'Unknown')}"
         print(f"{position}. {name} - {points} points")
 
-def rowTeamColor(row):
-  if row['Constructor'] == 'Alpine F1 Team':
-    return ['background-color: #0093CC'] * len(row)
-  elif row['Constructor'] == 'Aston Martin':
-    return ['background-color: #229971'] * len(row)
-  elif row['Constructor'] == 'Ferrari':
-    return ['background-color: #E80020'] * len(row)
-  elif row['Constructor'] == 'Haas F1 Team':
-    return ['background-color: #B6BABD'] * len(row)
-  elif row['Constructor'] == 'McLaren':
-    return ['background-color: #FF8000'] * len(row)
-  elif row['Constructor'] == 'Mercedes':
-    return ['background-color: #27F4D2'] * len(row)
-  elif row['Constructor'] == 'RB F1 Team':
-    return ['background-color: #6692FF'] * len(row)
-  elif row['Constructor'] == 'Red Bull':
-    return ['background-color: #3671C6'] * len(row)
-  elif row['Constructor'] == 'Sauber':
-    return ['background-color: #52E252'] * len(row)
-  elif row['Constructor'] == 'Williams':
-    return ['background-color: #64C4FF'] * len(row)
-  else:
-    return ['background-color: #FFFFFF'] * len(row)
+def colorRow(row):
+    # Get the color for the constructor name, defaulting to white if not found
+    color = GetTeamColor(row['Constructor'])
+    return [f'background-color: {color}'] * len(row)
+  
+def GetTeamColor(constructor_name):
+    team_colors = {
+        'Alpine F1 Team': '#0093CC',
+        'Aston Martin': '#229971',
+        'Ferrari': '#E80020',
+        'Haas F1 Team': '#B6BABD',
+        'McLaren': '#FF8000',
+        'Mercedes': '#27F4D2',
+        'RB F1 Team': '#6692FF',
+        'Red Bull': '#3671C6',
+        'Sauber': '#52E252',
+        'Williams': '#64C4FF'
+    }
+    # return 
+    return team_colors.get(constructor_name, '#FFFFFF')  # Default to white if not found

@@ -7,11 +7,11 @@ def constructor_championship_page():
     st.title("Constructor Championship")
     standings = data.GetChampionshipPoints(datetime.now().year, 'constructorStandings')
     if standings:
-        df = ConvertToDataFrame(standings)
+        df = ConvertToDataFrame_Constructor(standings)
         # Set the index before styling
         df = df.set_index('Position')
         # Apply team colors but also set text to black and bold
-        styled_df = df.style.apply(util.rowTeamColor, axis=1).set_properties(**{
+        styled_df = df.style.apply(util.colorRow, axis=1).set_properties(**{
             'color': 'black',
             'font-weight': 'bold'
         })
@@ -19,7 +19,7 @@ def constructor_championship_page():
     else:
         st.error("Failed to fetch driver championship data.")
 
-def ConvertToDataFrame(data):
+def ConvertToDataFrame_Constructor(data):
     constructor_data = []
     for constructor in data:
         constructor_data.append({
